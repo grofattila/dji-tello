@@ -1,7 +1,7 @@
 package hu.atig.dji.tello.exception;
 
-public class EmptyCommandException extends RuntimeException {
+public class EmptyTelloCommandException extends Exception {
 
-    
+
 
 }

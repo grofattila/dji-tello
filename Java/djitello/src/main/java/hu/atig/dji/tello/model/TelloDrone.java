@@ -1,39 +1,20 @@
-package hu.atig.dji.tello;
+package hu.atig.dji.tello.model;
 
-import hu.atig.dji.tello.exception.EmptyTelloCommandException;
+public interface TelloDrone {
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.util.Scanner;
+  public Integer getBattery();
 
-/**
- * Represents the Tello Drone.
- */
-public class TelloDrone {
+  public void setBattery(Integer battery);
 
+  public Integer getSpeed();
 
-    private InetAddress ipAddress = null;
-    private int port;
-    private DatagramSocket datagramSocket;
-    private boolean isImperial;
+  public void setSpeed(Integer speed);
 
+  public String getTime();
 
+  public void setTime(String time);
 
-    private String sendCommand(final String command) throws IOException {
-        if(command == null || command.length() == 0)
-            throw new EmptyTelloCommandException();
-        if(!datagramSocket.isConnected())
-            return "disconnected";
-        byte[] receiveData = new byte[1024];
-        final byte[] sendData = strCommand.getBytes();
-        final DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ip, port);
-        s.send(sendPacket);
-        final DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-        s.receive(receivePacket);
-        final String ret = new String(receivePacket.getData());
-        System.out.println("Tello " + strCommand + ": " + ret);
-        return ret;
-    }
+  public TelloConnection getTelloConnection();
+
+  public void setTelloConnection(TelloConnection telloConnection);
 }
