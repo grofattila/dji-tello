@@ -1,5 +1,5 @@
 # DJI-Tello
 
-This repositry is to give you control over your Tello drone from your laptop/PC. 
+A Java module that gives you controll to your Tello drone. 
 
-This enables you to run sophisticated algorithms on the drones video footage and send instructions to the drone based on your analysis.
+Under development. Release date: around 2019 January.
