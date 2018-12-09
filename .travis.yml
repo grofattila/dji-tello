@@ -1,4 +1,4 @@
 language: java
 jdk:
   - oraclejdk8
-before_script: cd dji-tello
+before_script: cd djitello
