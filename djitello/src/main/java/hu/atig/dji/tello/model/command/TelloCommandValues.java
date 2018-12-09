@@ -8,7 +8,7 @@ public class TelloCommandValues {
   /**
    * Enter command mode.
    */
-  public static final String COMMAND = "command";
+  public static final String COMMAND_MODE = "command";
 
   /**
    * Auto takeoff.
@@ -19,6 +19,22 @@ public class TelloCommandValues {
    * Auto landing.
    */
   public static final String LAND = "land";
+
+  /**
+   * Enable video stream.
+   */
+  public static final String ENABLE_VIDEO_STREAM = "streamon";
+
+  /**
+   * Disable video stream.
+   */
+  public static final String DISABLE_VIDEO_STREAM = "streamoff";
+
+  /**
+   * Stops motors immidiately.
+   */
+  public static final String EMERGENCY = "emergency";
+
 
   /**
    * Fly upward xx (xx = 20 - 500 cm).
@@ -66,24 +82,55 @@ public class TelloCommandValues {
    */
   public static final String FLIP = "flip";
 
+
+  /**
+   * Fly to “x” “y” “z” at “speed” (cm/s). go x y z speed “x” = -500-500 “y” = -500-500 “z” =
+   * -500-500 “speed” = 10-100 Note: “x”, “y”, and “z” values can’t be set between -20 – 20
+   * simultaneously.
+   */
+  public static final String GO = "go";
+
+  /**
+   * Fly at a curve according to the two given coordinates at “speed” (cm/s). If the arc radius is
+   * not within a range of 0.5-10 meters, it will respond with an error. “x1”, “x2” = -500-500 “y1”,
+   * “y2” = -500-500 “z1”, “z2” = -500-500 “speed” = 10-60 Note: “x”, “y”, and “z” values can’t be
+   * set between -20 – 20 simultaneously.
+   */
+  public static final String CURVE = "curve";
+
+  /**
+   * Hovers in the air. Works any time.
+   */
+  public static final String STOP = "stop";
+
   /**
    * Set current speed as xx (xx = 1-100 cm/s ).
    */
   public static final String SPEED = "speed";
 
   /**
-   * Get current speed.
+   * Obtain current speed (cm/s).
    */
-  public static final String CURRENT_SPEED = "Speed?";
+  public static final String CURRENT_SPEED = "speed?";
 
   /**
-   * Get current battery percentage.
+   * Obtain current battery percentage.
    */
-  public static final String CURRENT_BATTERY = "Battery?";
+  public static final String CURRENT_BATTERY = "battery?";
 
   /**
-   * Get current flight time.
+   * Obtain current flight time.
    */
-  public static final String CURRENT_FLY_TIME = "Time?";
+  public static final String CURRENT_FLY_TIME = "time?";
+
+  /**
+   * Obtain the Tello SDK version.
+   */
+  public static final String SDK = "sdk?";
+
+  /**
+   * Obtain the Tello serial number.
+   */
+  public static final String SB = "sn?";
 
 }

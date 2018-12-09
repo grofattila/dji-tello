@@ -15,6 +15,12 @@ public interface TelloWorld {
    */
   void disconnect();
 
+
+  /**
+   * Enter command mode. You can only execute commands after this call.
+   */
+  void enterCommandMode();
+
   /**
    * Taking off from the ground.
    */
