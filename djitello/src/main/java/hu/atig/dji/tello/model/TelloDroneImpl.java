@@ -18,6 +18,12 @@ public class TelloDroneImpl implements TelloDrone {
   private Integer speed;
   private String time;
   private TelloConnection telloConnection;
+  private TelloMode telloMode;
+
+  public TelloDroneImpl() {
+    telloConnection = TelloConnection.CONNECTED;
+    telloMode = TelloMode.NORMAL;
+  }
 
   @Override
   public Integer getBattery() {
@@ -57,5 +63,15 @@ public class TelloDroneImpl implements TelloDrone {
   @Override
   public void setTelloConnection(TelloConnection telloConnection) {
     this.telloConnection = telloConnection;
+  }
+
+  @Override
+  public TelloMode getTelloMode() {
+    return telloMode;
+  }
+
+  @Override
+  public void setTelloMode(TelloMode telloMode) {
+    this.telloMode = telloMode;
   }
 }

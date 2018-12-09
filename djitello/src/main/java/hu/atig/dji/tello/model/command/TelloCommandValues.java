@@ -1,4 +1,4 @@
-package hu.atig.dji.tello.model;
+package hu.atig.dji.tello.model.command;
 
 /**
  * Commands for the DJI Tello drone. Source: https://github.com/grofattila/dji-tello/blob/experimental/Tello_SDK.pdf

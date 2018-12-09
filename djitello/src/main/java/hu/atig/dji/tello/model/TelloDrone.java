@@ -2,19 +2,23 @@ package hu.atig.dji.tello.model;
 
 public interface TelloDrone {
 
-  public Integer getBattery();
+  Integer getBattery();
 
-  public void setBattery(Integer battery);
+  void setBattery(Integer battery);
 
-  public Integer getSpeed();
+  Integer getSpeed();
 
-  public void setSpeed(Integer speed);
+  void setSpeed(Integer speed);
 
-  public String getTime();
+  String getTime();
 
-  public void setTime(String time);
+  void setTime(String time);
 
-  public TelloConnection getTelloConnection();
+  TelloConnection getTelloConnection();
 
-  public void setTelloConnection(TelloConnection telloConnection);
+  void setTelloConnection(TelloConnection telloConnection);
+
+  TelloMode getTelloMode();
+
+  void setTelloMode(TelloMode telloMode);
 }

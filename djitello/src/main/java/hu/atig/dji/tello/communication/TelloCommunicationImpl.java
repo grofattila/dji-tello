@@ -1,8 +1,8 @@
 package hu.atig.dji.tello.communication;
 
 import hu.atig.dji.tello.exception.TelloConnectionException;
-import hu.atig.dji.tello.model.TelloCommand;
 import hu.atig.dji.tello.model.TelloDroneImpl;
+import hu.atig.dji.tello.model.command.TelloCommand;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -39,59 +39,57 @@ public class TelloCommunicationImpl implements TelloCommunication {
       this.ipAddress = InetAddress.getByName(TelloDroneImpl.IP_ADDRESS);
       this.udpPort = TelloDroneImpl.UDP_PORT;
     } catch (UnknownHostException e) {
-      logger.info("Connectino to the drone could not be established.");
-      throw new TelloConnectionException("Could not connect, unkown host.");
+      throw new TelloConnectionException("Unknown host");
     }
   }
 
   @Override
-  public void connect() {
-
+  public boolean connect() {
     try {
       ds = new DatagramSocket(udpPort);
       ds.connect(ipAddress, udpPort);
-
     } catch (SocketException e) {
-      e.printStackTrace();
+      logger.info("Connection to the drone could not be established.");
+      throw new TelloConnectionException("Could not connect");
     }
-
-    /*System.out.println(ds.getLocalPort());
-    System.out.println(ds.getLocalSocketAddress());
-    System.out.println(ds.getLocalAddress());
-    System.out.println(ds.getPort());
-    System.out.println(ds.getRemoteSocketAddress());
-    System.out.println(ds.getReuseAddress());
-    System.out.println(ds.getReceiveBufferSize());
-    System.out.println(ds.getSendBufferSize());
-    System.out.println(ds.getTrafficClass());*/
+    return true;
   }
 
   @Override
-  public void executeCommand(TelloCommand telloCommand) {
-    String command = null;
-    if (command == null || command.length() == 0) {
-      //throw new EmptyTelloCommandException();
+  public void enterCommandMode() {
+
+  }
+
+  @Override
+  public boolean executeCommand(final TelloCommand telloCommand) {
+    if (telloCommand == null) {
+      logger.info("TelloCommand was null");
+      return false;
     }
     if (!ds.isConnected()) {
-      return;
+      logger.info("Tello connection lost");
+      return false;
     }
-    byte[] receiveData = new byte[1024];
-    final byte[] sendData = command.getBytes();
-    final DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ipAddress,
-        udpPort);
+
+    final String command = telloCommand.composeCommand();
+    logger.info("Tello command: " + command);
+
     try {
-      ds.send(sendPacket);
+      sendData(command);
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.info("Exception occurred during sending command");
+      logger.info(e.getMessage());
+      return false;
     }
-    final DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+
     try {
-      ds.receive(receivePacket);
+      receiveData();
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.info("Exception occurred during receiving command response");
+      logger.info(e.getMessage());
+      return false;
     }
-    final String ret = new String(receivePacket.getData());
-    System.out.println("Tello " + command + ": " + ret);
+    return true;
   }
 
 
@@ -103,6 +101,20 @@ public class TelloCommunicationImpl implements TelloCommunication {
   @Override
   public void disconnect() {
 
+  }
+
+  private void sendData(String data) throws IOException {
+    byte[] sendData = data.getBytes();
+    final DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ipAddress,
+        udpPort);
+    ds.send(sendPacket);
+  }
+
+  private String receiveData() throws IOException {
+    byte[] receiveData = new byte[1024];
+    final DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+    ds.receive(receivePacket);
+    return new String(receivePacket.getData());
   }
 
 
