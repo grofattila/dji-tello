@@ -2,8 +2,9 @@ package hu.atig.dji.tello.communication;
 
 import hu.atig.dji.tello.exception.TelloCommandException;
 import hu.atig.dji.tello.exception.TelloConnectionException;
-import hu.atig.dji.tello.model.TelloDroneImpl;
+import hu.atig.dji.tello.exception.TelloException;
 import hu.atig.dji.tello.model.command.TelloCommand;
+import hu.atig.dji.tello.model.drone.TelloDrone;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -12,9 +13,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -41,15 +40,15 @@ public class TelloCommunicationImpl implements TelloCommunication {
 
   public TelloCommunicationImpl() throws TelloConnectionException {
     try {
-      this.ipAddress = InetAddress.getByName(TelloDroneImpl.IP_ADDRESS);
-      this.udpPort = TelloDroneImpl.UDP_PORT;
+      this.ipAddress = InetAddress.getByName(TelloDrone.IP_ADDRESS);
+      this.udpPort = TelloDrone.UDP_PORT;
     } catch (UnknownHostException e) {
       throw new TelloConnectionException("Unknown host");
     }
   }
 
   @Override
-  public boolean connect() {
+  public boolean connect() throws TelloConnectionException {
     try {
       ds = new DatagramSocket(udpPort);
       ds.connect(ipAddress, udpPort);
@@ -87,14 +86,7 @@ public class TelloCommunicationImpl implements TelloCommunication {
     return true;
   }
 
-  @Override
-  public Map<String, String> getTelloOnBoardData(List<String> valuesToBeObtained) {
-    Map<String, String> dataMap = new HashMap<>();
-
-    return dataMap;
-  }
-
-  private String executeReadCommand(TelloCommand telloCommand) throws TelloCommandException {
+  public String executeReadCommand(TelloCommand telloCommand) throws TelloException {
     if (telloCommand == null) {
       logger.info("TelloCommand was null");
       throw new TelloCommandException("Command was empty");
@@ -110,10 +102,12 @@ public class TelloCommunicationImpl implements TelloCommunication {
     try {
       sendData(command);
       String response = receiveData();
+      logger.info("Tello response: " + response);
       return response;
     } catch (IOException e) {
-      e.printStackTrace();
-      return null;
+      logger.info("Exception occurred during sending and receiving command");
+      logger.info(e.getMessage());
+      throw new TelloConnectionException("Unexpected error during communication");
     }
   }
 

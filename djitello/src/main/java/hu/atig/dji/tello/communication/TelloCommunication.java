@@ -1,16 +1,17 @@
 package hu.atig.dji.tello.communication;
 
+import hu.atig.dji.tello.exception.TelloConnectionException;
+import hu.atig.dji.tello.exception.TelloException;
 import hu.atig.dji.tello.model.command.TelloCommand;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public interface TelloCommunication {
 
   /**
    * Establishing connecting to the Tello drone.
    */
-  boolean connect();
+  boolean connect() throws TelloConnectionException;
 
   /**
    * Executes commands on Tello drone.
@@ -20,15 +21,11 @@ public interface TelloCommunication {
    */
   boolean executeCommand(final TelloCommand telloCommand);
 
+  String executeReadCommand(final TelloCommand telloCommand) throws TelloException;
+
   void executeCommands(final List<TelloCommand> telloCommandList);
 
   void disconnect();
 
-  /**
-   * Obtains data about the Tello drone.
-   *
-   * @param valuesToBeObtained Valus to be obtained from the drone.
-   * @return Map of the data.
-   */
-  Map<String, String> getTelloOnBoardData(List<String> valuesToBeObtained);
+
 }

@@ -1,6 +1,6 @@
 package hu.atig.dji.tello.world;
 
-import hu.atig.dji.tello.model.TelloFlip;
+import hu.atig.dji.tello.model.drone.TelloFlip;
 
 public interface TelloWorld {
 
@@ -57,6 +57,6 @@ public interface TelloWorld {
 
   void rotateLeft(Integer angle);
 
-
+  void refreshTelloOnBoarData();
 
 }
