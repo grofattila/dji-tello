@@ -38,6 +38,11 @@ public class TelloCommunicationImpl implements TelloCommunication {
    */
   private Integer udpPort;
 
+  /**
+   * Constructor that initialises IP address and UDP port of the drone.
+   *
+   * @throws TelloConnectionException In case of a bad IP address od port number.
+   */
   public TelloCommunicationImpl() throws TelloConnectionException {
     try {
       this.ipAddress = InetAddress.getByName(TelloDrone.IP_ADDRESS);
@@ -86,6 +91,7 @@ public class TelloCommunicationImpl implements TelloCommunication {
     return true;
   }
 
+  @Override
   public String executeReadCommand(TelloCommand telloCommand) throws TelloException {
     if (telloCommand == null) {
       logger.info("TelloCommand was null");

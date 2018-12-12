@@ -155,11 +155,4 @@ public class TelloCommandValues {
    */
   public static final String TOF = "tof?";
 
-
-  public static String[] getAllReadCommandValues() {
-    return new String[]{CURRENT_SPEED, CURRENT_BATTERY, CURRENT_FLY_TIME, CURRENT_HEIGHT,
-        CURRENT_TEMPERATURE,
-        CURRENT_ATTITUDE_DATA, CURRENT_BAROMETER, CURRENT_ACCELERATION, TOF};
-  }
-
 }

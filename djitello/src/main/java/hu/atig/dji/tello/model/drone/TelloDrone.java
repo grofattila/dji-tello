@@ -60,6 +60,10 @@ public class TelloDrone implements Drone {
     return speed;
   }
 
+  public void setSpeed(Double speed) {
+    this.speed = speed;
+  }
+
   public void setSpeed(String speed) {
     this.speed = Double.valueOf(speed);
   }
@@ -72,9 +76,10 @@ public class TelloDrone implements Drone {
     this.battery = battery;
   }
 
-  public void setSpeed(Double speed) {
-    this.speed = speed;
+  public void setBattery(String battery) {
+    this.battery = Integer.valueOf(battery.trim());
   }
+
 
   public Integer getFlyTime() {
     return flyTime;
@@ -83,6 +88,11 @@ public class TelloDrone implements Drone {
   public Integer getHeight() {
     return height;
   }
+
+  public void setHeight(String height) {
+    this.height = Integer.valueOf(height.split("dm")[0]);
+  }
+
 
   public void setHeight(Integer height) {
     this.height = height;
@@ -94,6 +104,18 @@ public class TelloDrone implements Drone {
 
   public void setFlyTime(Integer flyTime) {
     this.flyTime = flyTime;
+  }
+
+  /**
+   * Sets the attitude values from the drones output.
+   *
+   * @param attitude Attitude in 3 dimensions.
+   */
+  public void setAttitude(String attitude) {
+    String[] strings = attitude.split(";");
+    this.attitudePitch = Integer.valueOf(strings[0].split(":")[1]);
+    this.attitudeRoll = Integer.valueOf(strings[1].split(":")[1]);
+    this.attitudeYaw = Integer.valueOf(strings[2].split(":")[1]);
   }
 
   public Integer getAttitudePitch() {
@@ -124,8 +146,25 @@ public class TelloDrone implements Drone {
     return barometer;
   }
 
+  public void setBarometer(String baro) {
+    this.barometer = Double.valueOf(baro);
+  }
+
+
   public void setBarometer(Double barometer) {
     this.barometer = barometer;
+  }
+
+  /**
+   * Sets acc form the drones acc data.
+   *
+   * @param acc Acceleration in 3 dimensions.
+   */
+  public void setAcc(String acc) {
+    String[] strings = acc.split(";");
+    this.accX = Double.valueOf(strings[0].split(":")[1]);
+    this.accY = Double.valueOf(strings[1].split(":")[1]);
+    this.accZ = Double.valueOf(strings[2].split(":")[1]);
   }
 
   public Double getAccX() {
@@ -188,29 +227,24 @@ public class TelloDrone implements Drone {
     this.tof = tof;
   }
 
-  public void setBattery(String battery) {
-    this.battery = Integer.valueOf(battery.trim());
-  }
-
-  public void setHeight(String height) {
-    this.height = Integer.valueOf(height.split("dm")[0]);
-  }
-
-  public void setAttitude(String attitude) {
-    String[] strings = attitude.split(";");
-    this.attitudePitch = Integer.valueOf(strings[0].split(":")[1]);
-    this.attitudeRoll = Integer.valueOf(strings[1].split(":")[1]);
-    this.attitudeYaw = Integer.valueOf(strings[2].split(":")[1]);
-  }
-
-  public void setBarometer(String baro) {
-    this.barometer = Double.valueOf(baro);
-  }
-
-  public void setAcc(String acc) {
-    String[] strings = acc.split(";");
-    this.accX = Double.valueOf(strings[0].split(":")[1]);
-    this.accY = Double.valueOf(strings[1].split(":")[1]);
-    this.accZ = Double.valueOf(strings[2].split(":")[1]);
+  @Override
+  public String toString() {
+    return "TelloDrone  {"
+        + "speed=" + speed
+        + ", battery=" + battery
+        + ", flyTime=" + flyTime
+        + ", height=" + height
+        + ", temperature='" + temperature + '\''
+        + ", attitudePitch=" + attitudePitch
+        + ", attitudeRoll=" + attitudeRoll
+        + ", attitudeYaw=" + attitudeYaw
+        + ", barometer=" + barometer
+        + ", accX=" + accX
+        + ", accY=" + accY
+        + ", accZ=" + accZ
+        + ", tof=" + tof
+        + ", telloConnection=" + telloConnection
+        + ", telloMode=" + telloMode
+        + '}';
   }
 }

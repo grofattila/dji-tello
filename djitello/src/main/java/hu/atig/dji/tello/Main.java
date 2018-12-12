@@ -5,6 +5,11 @@ import hu.atig.dji.tello.world.TelloWorldImpl;
 
 public class Main {
 
+  /**
+   * Main.
+   *
+   * @param args Params.
+   */
   public static void main(String[] args) {
     TelloWorld telloWorld = new TelloWorldImpl();
 

@@ -17,7 +17,7 @@ public interface TelloCommunication {
    * Executes commands on Tello drone.
    * @param telloCommand The command to be executed.
    * @return True if the executin was sucessful, false if not.
-   * @throws IOException
+   * @throws IOException Error in communication.
    */
   boolean executeCommand(final TelloCommand telloCommand);
 
