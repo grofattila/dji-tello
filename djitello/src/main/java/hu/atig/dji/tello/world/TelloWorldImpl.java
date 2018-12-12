@@ -5,6 +5,7 @@ import hu.atig.dji.tello.communication.TelloCommunicationImpl;
 import hu.atig.dji.tello.model.command.BasicTelloCommand;
 import hu.atig.dji.tello.model.command.TelloCommand;
 import hu.atig.dji.tello.model.command.TelloCommandValues;
+import hu.atig.dji.tello.model.drone.TelloConnection;
 import hu.atig.dji.tello.model.drone.TelloDrone;
 import hu.atig.dji.tello.model.drone.TelloFlip;
 import java.util.logging.Logger;
@@ -26,15 +27,16 @@ public class TelloWorldImpl implements TelloWorld {
   public void connect() {
     boolean connectionSuccessful = telloCommunication.connect();
     if (connectionSuccessful) {
-      //drone.setTelloConnection(TelloConnection.CONNECTED);
+      drone.setTelloConnection(TelloConnection.CONNECTED);
       logger.info("Connected!");
     }
-
   }
 
   @Override
   public void disconnect() {
-
+    drone.setTelloConnection(TelloConnection.DISCONNECTED);
+    telloCommunication.disconnect();
+    logger.info("Disconnected!");
   }
 
   @Override
@@ -107,35 +109,28 @@ public class TelloWorldImpl implements TelloWorld {
 
   @Override
   public void refreshTelloOnBoarData() {
-    TelloCommand command = null;
-    String result = null;
+    drone.setSpeed(telloCommunication
+        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_SPEED)));
+    drone.setBattery(telloCommunication
+        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_BATTERY)));
+    drone.setFlyTime(telloCommunication
+        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_FLY_TIME)));
+    drone.setHeight(telloCommunication
+        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_HEIGHT)));
+    drone.setTemperature(telloCommunication
+        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_TEMPERATURE)));
+    drone.setAttitude(telloCommunication
+        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_ATTITUDE_DATA)));
+    drone.setBarometer(telloCommunication
+        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_BAROMETER)));
+    drone.setAcc(telloCommunication
+        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_ACCELERATION)));
+    drone.setTof(
+        telloCommunication.executeReadCommand(new BasicTelloCommand(TelloCommandValues.TOF)));
+  }
 
-    command = new BasicTelloCommand(TelloCommandValues.CURRENT_SPEED);
-    result = telloCommunication.executeReadCommand(command);
-
-    command = new BasicTelloCommand(TelloCommandValues.CURRENT_BATTERY);
-    result = telloCommunication.executeReadCommand(command);
-
-    command = new BasicTelloCommand(TelloCommandValues.CURRENT_FLY_TIME);
-    result = telloCommunication.executeReadCommand(command);
-
-    command = new BasicTelloCommand(TelloCommandValues.CURRENT_HEIGHT);
-    result = telloCommunication.executeReadCommand(command);
-
-    command = new BasicTelloCommand(TelloCommandValues.CURRENT_TEMPERATURE);
-    result = telloCommunication.executeReadCommand(command);
-
-    command = new BasicTelloCommand(TelloCommandValues.CURRENT_ATTITUDE_DATA);
-    result = telloCommunication.executeReadCommand(command);
-
-    command = new BasicTelloCommand(TelloCommandValues.CURRENT_BAROMETER);
-    result = telloCommunication.executeReadCommand(command);
-
-    command = new BasicTelloCommand(TelloCommandValues.CURRENT_ACCELERATION);
-    result = telloCommunication.executeReadCommand(command);
-
-    command = new BasicTelloCommand(TelloCommandValues.TOF);
-    result = telloCommunication.executeReadCommand(command);
+  public String getTelloDroneData() {
+    return drone.toString();
   }
 
 }

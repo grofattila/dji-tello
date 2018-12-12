@@ -11,6 +11,7 @@ public class Main {
     telloWorld.connect();
     telloWorld.enterCommandMode();
     telloWorld.refreshTelloOnBoarData();
+    System.out.println(((TelloWorldImpl) telloWorld).getTelloDroneData());
 
   }
 

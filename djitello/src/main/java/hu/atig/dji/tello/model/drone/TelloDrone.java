@@ -15,11 +15,30 @@ public class TelloDrone implements Drone {
    */
   public static final Integer UDP_PORT = 8889;
 
-  private Integer speed;
+  /**
+   * Speed of the drone.
+   */
+  private Double speed;
+
+  /**
+   * Battery percentage of the drone.
+   */
   private Integer battery;
-  private String flyTime;
+
+  /**
+   * Current fly time (seconds).
+   */
+  private Integer flyTime;
+
+  /**
+   * Current fly height (dm).
+   */
   private Integer height;
-  private Integer temperature;
+
+  /**
+   * Current temperature of the drone.
+   */
+  private String temperature;
   private Integer attitudePitch;
   private Integer attitudeRoll;
   private Integer attitudeYaw;
@@ -27,7 +46,7 @@ public class TelloDrone implements Drone {
   private Double accX;
   private Double accY;
   private Double accZ;
-  private Integer TOF;
+  private Integer tof;
 
   private TelloConnection telloConnection;
   private TelloMode telloMode;
@@ -37,12 +56,12 @@ public class TelloDrone implements Drone {
     telloMode = TelloMode.NORMAL;
   }
 
-  public Integer getSpeed() {
+  public Double getSpeed() {
     return speed;
   }
 
-  public void setSpeed(Integer speed) {
-    this.speed = speed;
+  public void setSpeed(String speed) {
+    this.speed = Double.valueOf(speed);
   }
 
   public Integer getBattery() {
@@ -53,12 +72,12 @@ public class TelloDrone implements Drone {
     this.battery = battery;
   }
 
-  public String getFlyTime() {
-    return flyTime;
+  public void setSpeed(Double speed) {
+    this.speed = speed;
   }
 
-  public void setFlyTime(String flyTime) {
-    this.flyTime = flyTime;
+  public Integer getFlyTime() {
+    return flyTime;
   }
 
   public Integer getHeight() {
@@ -69,12 +88,12 @@ public class TelloDrone implements Drone {
     this.height = height;
   }
 
-  public Integer getTemperature() {
-    return temperature;
+  public void setFlyTime(String flyTime) {
+    this.flyTime = Integer.valueOf(flyTime.split("s")[0]);
   }
 
-  public void setTemperature(Integer temperature) {
-    this.temperature = temperature;
+  public void setFlyTime(Integer flyTime) {
+    this.flyTime = flyTime;
   }
 
   public Integer getAttitudePitch() {
@@ -133,12 +152,12 @@ public class TelloDrone implements Drone {
     this.accZ = accZ;
   }
 
-  public Integer getTOF() {
-    return TOF;
+  public String getTemperature() {
+    return temperature;
   }
 
-  public void setTOF(Integer TOF) {
-    this.TOF = TOF;
+  public void setTemperature(String temperature) {
+    this.temperature = temperature;
   }
 
   public TelloConnection getTelloConnection() {
@@ -155,5 +174,43 @@ public class TelloDrone implements Drone {
 
   public void setTelloMode(TelloMode telloMode) {
     this.telloMode = telloMode;
+  }
+
+  public Integer getTof() {
+    return tof;
+  }
+
+  public void setTof(String tof) {
+    this.tof = Integer.valueOf(tof.split("mm")[0]);
+  }
+
+  public void setTof(Integer tof) {
+    this.tof = tof;
+  }
+
+  public void setBattery(String battery) {
+    this.battery = Integer.valueOf(battery.trim());
+  }
+
+  public void setHeight(String height) {
+    this.height = Integer.valueOf(height.split("dm")[0]);
+  }
+
+  public void setAttitude(String attitude) {
+    String[] strings = attitude.split(";");
+    this.attitudePitch = Integer.valueOf(strings[0].split(":")[1]);
+    this.attitudeRoll = Integer.valueOf(strings[1].split(":")[1]);
+    this.attitudeYaw = Integer.valueOf(strings[2].split(":")[1]);
+  }
+
+  public void setBarometer(String baro) {
+    this.barometer = Double.valueOf(baro);
+  }
+
+  public void setAcc(String acc) {
+    String[] strings = acc.split(";");
+    this.accX = Double.valueOf(strings[0].split(":")[1]);
+    this.accY = Double.valueOf(strings[1].split(":")[1]);
+    this.accZ = Double.valueOf(strings[2].split(":")[1]);
   }
 }
