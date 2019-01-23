@@ -8,3 +8,13 @@ Java API for programming the Tello Drone.
 
 Under development. Release date: around 2019 January.
  
+
+
+License
+-------
+
+```
+MIT License
+
+Copyright (c) 2018 Gróf Attila
+```
