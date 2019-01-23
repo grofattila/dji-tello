@@ -8,12 +8,27 @@ public class TelloDrone implements Drone {
   /*
    * Connection IP address.
    */
-  public static final String IP_ADDRESS = "192.168.10.1";
+  public static final String DRONE_IP_ADDRESS = "192.168.10.1";
 
   /*
-   * Connection UDP Port.
+   * Listen IP address.
    */
-  public static final Integer UDP_PORT = 8889;
+  public static final String DRONE_LISTEN_IP_ADDRESS = "0.0.0.0";
+
+  /*
+   * Send command and receive response udp port.
+   */
+  public static final Integer UDP_PORT_SEND_COMMAND_RECEIVE_RESPONSE = 8889;
+
+  /*
+   * Receive drone state udp port.
+   */
+  public static final Integer UDP_PORT_RECEIVE_DRONE_STATE = 8890;
+
+  /*
+   * Send command and receive response udp port.
+   */
+  public static final Integer UDP_PORT_RECEIVE_DRONE_VIDEO_STREAM = 11111;
 
   /**
    * Speed of the drone.

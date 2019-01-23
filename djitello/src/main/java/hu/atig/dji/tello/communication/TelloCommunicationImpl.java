@@ -39,14 +39,19 @@ public class TelloCommunicationImpl implements TelloCommunication {
   private Integer udpPort;
 
   /**
+   * Tello video stream listener thread.
+   */
+  private TelloVideoStreamListenerThread videoStreamListenerThread;
+
+  /**
    * Constructor that initialises IP address and UDP port of the drone.
    *
    * @throws TelloConnectionException In case of a bad IP address od port number.
    */
   public TelloCommunicationImpl() throws TelloConnectionException {
     try {
-      this.ipAddress = InetAddress.getByName(TelloDrone.IP_ADDRESS);
-      this.udpPort = TelloDrone.UDP_PORT;
+      this.ipAddress = InetAddress.getByName(TelloDrone.DRONE_IP_ADDRESS);
+      this.udpPort = TelloDrone.UDP_PORT_SEND_COMMAND_RECEIVE_RESPONSE;
     } catch (UnknownHostException e) {
       throw new TelloConnectionException("Unknown host");
     }
@@ -57,11 +62,11 @@ public class TelloCommunicationImpl implements TelloCommunication {
     try {
       ds = new DatagramSocket(udpPort);
       ds.connect(ipAddress, udpPort);
+      return ds.isConnected();
     } catch (SocketException e) {
       logger.info("Connection to the drone could not be established.");
       throw new TelloConnectionException("Could not connect");
     }
-    return true;
   }
 
   @Override
@@ -120,6 +125,27 @@ public class TelloCommunicationImpl implements TelloCommunication {
   @Override
   public void executeCommands(List<TelloCommand> telloCommandList) {
 
+  }
+
+  @Override
+  public void startVideoStream() {
+    logger.info("Starting video stream....");
+    if (videoStreamListenerThread != null && videoStreamListenerThread.isStreamOn()) {
+      videoStreamListenerThread.setStreamOn(false);
+      videoStreamListenerThread = new TelloVideoStreamListenerThread();
+      videoStreamListenerThread.start();
+    } else {
+      videoStreamListenerThread = new TelloVideoStreamListenerThread();
+      videoStreamListenerThread.start();
+    }
+  }
+
+  @Override
+  public void stopVideoStream() {
+    logger.info("Stopping video stream.");
+    if (videoStreamListenerThread != null && !videoStreamListenerThread.isStreamOn()) {
+      videoStreamListenerThread.setStreamOn(false);
+    }
   }
 
   @Override

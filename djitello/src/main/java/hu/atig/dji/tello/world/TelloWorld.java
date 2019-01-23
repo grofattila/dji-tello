@@ -59,4 +59,8 @@ public interface TelloWorld {
 
   void refreshTelloOnBoarData();
 
+  void startStream();
+
+  void stopStream();
+
 }

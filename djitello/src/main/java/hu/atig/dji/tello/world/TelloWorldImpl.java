@@ -123,10 +123,30 @@ public class TelloWorldImpl implements TelloWorld {
         .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_ATTITUDE_DATA)));
     drone.setBarometer(telloCommunication
         .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_BAROMETER)));
-    drone.setAcc(telloCommunication
-        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_ACCELERATION)));
+    //drone.setAcc(telloCommunication
+    //    .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_ACCELERATION)));
     drone.setTof(
         telloCommunication.executeReadCommand(new BasicTelloCommand(TelloCommandValues.TOF)));
+  }
+
+  @Override
+  public void startStream() {
+    boolean executionSuccessful = telloCommunication
+        .executeCommand(new BasicTelloCommand(TelloCommandValues.ENABLE_VIDEO_STREAM));
+    if (executionSuccessful) {
+      telloCommunication.startVideoStream();
+      logger.info("Stream start command was executed successfully");
+    }
+  }
+
+  @Override
+  public void stopStream() {
+    boolean executionSuccessful = telloCommunication
+        .executeCommand(new BasicTelloCommand(TelloCommandValues.DISABLE_VIDEO_STREAM));
+    if (executionSuccessful) {
+      telloCommunication.stopVideoStream();
+      logger.info("Stream end command was executed successfully");
+    }
   }
 
   public String getTelloDroneData() {

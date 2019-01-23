@@ -25,7 +25,10 @@ public interface TelloCommunication {
 
   void executeCommands(final List<TelloCommand> telloCommandList);
 
-  void disconnect();
+  void startVideoStream();
 
+  void stopVideoStream();
+
+  void disconnect();
 
 }
