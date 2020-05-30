@@ -7,9 +7,15 @@
 
 Java API for programming the Tello Drone. 
 
-Under development. 
- 
+## Module list
 
+### tello-java-core
+
+### tello-java-client
+
+### tello-python-client
+ 
+### tello-android-clinet
 
 License
 -------
