@@ -12,6 +12,7 @@
 
     <modules>
         <module>tello-core</module>
+        <module>tello-cli-client</module>
         <module>tello-javafx-client</module>
     </modules>
 
