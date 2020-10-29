@@ -4,20 +4,21 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0d1fa49ccd61483dab3cf66438c6b76c)](https://app.codacy.com/app/grofattila/dji-tello?utm_source=github.com&utm_medium=referral&utm_content=grofattila/dji-tello&utm_campaign=Badge_Grade_Dashboard)
 [![CodeFactor](https://www.codefactor.io/repository/github/grofattila/dji-tello/badge)](https://www.codefactor.io/repository/github/grofattila/dji-tello)
 
+This repository contains a pure Java implementation to communicate with DJI Tello Drone and sample 
+client applications that can utilize the core tello library.
 
-Java API for programming the Tello Drone. 
+Feel free to contribute.
+
+![dji-tello pic](docs/images/tello.jpg)
 
 ## Module list
 
-### tello-java-core
+### Tello Core library
+### Tello Command line client
+### Tello JavaFX GUI Client
 
-### tello-java-client
 
-### tello-python-client
- 
-### tello-android-clinet
-
-License
+License 
 -------
 
 ```
