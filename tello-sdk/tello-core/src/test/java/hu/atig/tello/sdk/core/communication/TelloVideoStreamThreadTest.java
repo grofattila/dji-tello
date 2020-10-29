@@ -1,11 +1,11 @@
 package hu.atig.tello.sdk.core.communication;
 
 
-import static java.lang.Thread.sleep;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import static java.lang.Thread.sleep;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TelloVideoStreamThreadTest {
 
