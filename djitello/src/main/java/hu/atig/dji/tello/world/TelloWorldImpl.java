@@ -2,26 +2,24 @@ package hu.atig.dji.tello.world;
 
 import hu.atig.dji.tello.communication.TelloCommunication;
 import hu.atig.dji.tello.communication.TelloCommunicationImpl;
-import hu.atig.dji.tello.model.TelloConnection;
-import hu.atig.dji.tello.model.TelloDrone;
-import hu.atig.dji.tello.model.TelloDroneImpl;
-import hu.atig.dji.tello.model.TelloFlip;
 import hu.atig.dji.tello.model.command.BasicTelloCommand;
 import hu.atig.dji.tello.model.command.TelloCommand;
 import hu.atig.dji.tello.model.command.TelloCommandValues;
+import hu.atig.dji.tello.model.drone.TelloConnection;
+import hu.atig.dji.tello.model.drone.TelloDrone;
+import hu.atig.dji.tello.model.drone.TelloFlip;
 import java.util.logging.Logger;
 
 public class TelloWorldImpl implements TelloWorld {
 
   private static final Logger logger = Logger.getLogger(TelloWorldImpl.class.getName());
 
-
-  private TelloDrone telloDrone;
+  private TelloDrone drone;
 
   private TelloCommunication telloCommunication;
 
   public TelloWorldImpl() {
-    telloDrone = new TelloDroneImpl();
+    drone = new TelloDrone();
     telloCommunication = new TelloCommunicationImpl();
   }
 
@@ -29,14 +27,16 @@ public class TelloWorldImpl implements TelloWorld {
   public void connect() {
     boolean connectionSuccessful = telloCommunication.connect();
     if (connectionSuccessful) {
-      telloDrone.setTelloConnection(TelloConnection.CONNECTED);
+      drone.setTelloConnection(TelloConnection.CONNECTED);
       logger.info("Connected!");
     }
   }
 
   @Override
   public void disconnect() {
-
+    drone.setTelloConnection(TelloConnection.DISCONNECTED);
+    telloCommunication.disconnect();
+    logger.info("Disconnected!");
   }
 
   @Override
@@ -105,6 +105,52 @@ public class TelloWorldImpl implements TelloWorld {
   @Override
   public void rotateLeft(Integer angle) {
 
+  }
+
+  @Override
+  public void refreshTelloOnBoarData() {
+    drone.setSpeed(telloCommunication
+        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_SPEED)));
+    drone.setBattery(telloCommunication
+        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_BATTERY)));
+    drone.setFlyTime(telloCommunication
+        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_FLY_TIME)));
+    drone.setHeight(telloCommunication
+        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_HEIGHT)));
+    drone.setTemperature(telloCommunication
+        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_TEMPERATURE)));
+    drone.setAttitude(telloCommunication
+        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_ATTITUDE_DATA)));
+    drone.setBarometer(telloCommunication
+        .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_BAROMETER)));
+    //drone.setAcc(telloCommunication
+    //    .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_ACCELERATION)));
+    drone.setTof(
+        telloCommunication.executeReadCommand(new BasicTelloCommand(TelloCommandValues.TOF)));
+  }
+
+  @Override
+  public void startStream() {
+    boolean executionSuccessful = telloCommunication
+        .executeCommand(new BasicTelloCommand(TelloCommandValues.ENABLE_VIDEO_STREAM));
+    if (executionSuccessful) {
+      telloCommunication.startVideoStream();
+      logger.info("Stream start command was executed successfully");
+    }
+  }
+
+  @Override
+  public void stopStream() {
+    boolean executionSuccessful = telloCommunication
+        .executeCommand(new BasicTelloCommand(TelloCommandValues.DISABLE_VIDEO_STREAM));
+    if (executionSuccessful) {
+      telloCommunication.stopVideoStream();
+      logger.info("Stream end command was executed successfully");
+    }
+  }
+
+  public String getTelloDroneData() {
+    return drone.toString();
   }
 
 }

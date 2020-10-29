@@ -108,6 +108,8 @@ public class TelloCommandValues {
    */
   public static final String SPEED = "speed";
 
+  // Read commands //
+
   /**
    * Obtain current speed (cm/s).
    */
@@ -124,13 +126,33 @@ public class TelloCommandValues {
   public static final String CURRENT_FLY_TIME = "time?";
 
   /**
-   * Obtain the Tello SDK version.
+   * Obtain current droen height (cm, x: 0-3000).
    */
-  public static final String SDK = "sdk?";
+  public static final String CURRENT_HEIGHT = "height?";
 
   /**
-   * Obtain the Tello serial number.
+   * Obtain current temperature of the drone (C°, x: 0-90).
    */
-  public static final String SB = "sn?";
+  public static final String CURRENT_TEMPERATURE = "temp?";
+
+  /**
+   * Obtain IMU attitude data (pitch, roll, yaw).
+   */
+  public static final String CURRENT_ATTITUDE_DATA = "attitude?";
+
+  /**
+   * Obtain current barometer value (m).
+   */
+  public static final String CURRENT_BAROMETER = "baro?";
+
+  /**
+   * Obtain IMU angular acceleration data (0.001g, x y z).
+   */
+  public static final String CURRENT_ACCELERATION = "acceleration?";
+
+  /**
+   * Obtain distance value from TOF（cm, x: 30-1000）.
+   */
+  public static final String TOF = "tof?";
 
 }

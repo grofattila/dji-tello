@@ -7,20 +7,31 @@ import hu.atig.dji.tello.world.TelloWorldImpl;
 
 public class Main {
 
+  /**
+   * Main.
+   *
+   * @param args Params.
+   */
   public static void main(String[] args) {
     TelloWorld telloWorld = new TelloWorldImpl();
 
     telloWorld.connect();
-    telloWorld.enterCommandMode();
-    telloWorld.takeOff();
-
     try {
-      sleep(5000);
+      sleep(1000);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
 
-    telloWorld.land();
+    telloWorld.enterCommandMode();
+    telloWorld.startStream();
+
+    try {
+      sleep(10000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
+    telloWorld.stopStream();
 
   }
 

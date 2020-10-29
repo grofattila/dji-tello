@@ -2,8 +2,9 @@ package hu.atig.dji.tello.communication;
 
 import hu.atig.dji.tello.exception.TelloCommandException;
 import hu.atig.dji.tello.exception.TelloConnectionException;
-import hu.atig.dji.tello.model.TelloDroneImpl;
+import hu.atig.dji.tello.exception.TelloException;
 import hu.atig.dji.tello.model.command.TelloCommand;
+import hu.atig.dji.tello.model.drone.TelloDrone;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -12,9 +13,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -39,25 +38,35 @@ public class TelloCommunicationImpl implements TelloCommunication {
    */
   private Integer udpPort;
 
+  /**
+   * Tello video stream listener thread.
+   */
+  private TelloVideoStreamListenerThread videoStreamListenerThread;
+
+  /**
+   * Constructor that initialises IP address and UDP port of the drone.
+   *
+   * @throws TelloConnectionException In case of a bad IP address od port number.
+   */
   public TelloCommunicationImpl() throws TelloConnectionException {
     try {
-      this.ipAddress = InetAddress.getByName(TelloDroneImpl.IP_ADDRESS);
-      this.udpPort = TelloDroneImpl.UDP_PORT;
+      this.ipAddress = InetAddress.getByName(TelloDrone.DRONE_IP_ADDRESS);
+      this.udpPort = TelloDrone.UDP_PORT_SEND_COMMAND_RECEIVE_RESPONSE;
     } catch (UnknownHostException e) {
       throw new TelloConnectionException("Unknown host");
     }
   }
 
   @Override
-  public boolean connect() {
+  public boolean connect() throws TelloConnectionException {
     try {
       ds = new DatagramSocket(udpPort);
       ds.connect(ipAddress, udpPort);
+      return ds.isConnected();
     } catch (SocketException e) {
       logger.info("Connection to the drone could not be established.");
       throw new TelloConnectionException("Could not connect");
     }
-    return true;
   }
 
   @Override
@@ -88,13 +97,7 @@ public class TelloCommunicationImpl implements TelloCommunication {
   }
 
   @Override
-  public Map<String, String> getTelloOnBoardData(List<String> valuesToBeObtained) {
-    Map<String, String> dataMap = new HashMap<>();
-
-    return dataMap;
-  }
-
-  private String executeReadCommand(TelloCommand telloCommand) throws TelloCommandException {
+  public String executeReadCommand(TelloCommand telloCommand) throws TelloException {
     if (telloCommand == null) {
       logger.info("TelloCommand was null");
       throw new TelloCommandException("Command was empty");
@@ -110,16 +113,39 @@ public class TelloCommunicationImpl implements TelloCommunication {
     try {
       sendData(command);
       String response = receiveData();
+      logger.info("Tello response: " + response);
       return response;
     } catch (IOException e) {
-      e.printStackTrace();
-      return null;
+      logger.info("Exception occurred during sending and receiving command");
+      logger.info(e.getMessage());
+      throw new TelloConnectionException("Unexpected error during communication");
     }
   }
 
   @Override
   public void executeCommands(List<TelloCommand> telloCommandList) {
 
+  }
+
+  @Override
+  public void startVideoStream() {
+    logger.info("Starting video stream....");
+    if (videoStreamListenerThread != null && videoStreamListenerThread.isStreamOn()) {
+      videoStreamListenerThread.setStreamOn(false);
+      videoStreamListenerThread = new TelloVideoStreamListenerThread();
+      videoStreamListenerThread.start();
+    } else {
+      videoStreamListenerThread = new TelloVideoStreamListenerThread();
+      videoStreamListenerThread.start();
+    }
+  }
+
+  @Override
+  public void stopVideoStream() {
+    logger.info("Stopping video stream.");
+    if (videoStreamListenerThread != null && !videoStreamListenerThread.isStreamOn()) {
+      videoStreamListenerThread.setStreamOn(false);
+    }
   }
 
   @Override
