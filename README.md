@@ -23,5 +23,5 @@ License
 ```
 MIT License
 
-Copyright (c) 2018 Gróf Attila
+Copyright (c) 2020 Gróf Attila
 ```
