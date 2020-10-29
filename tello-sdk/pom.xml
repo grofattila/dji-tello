@@ -5,8 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>hu.atig</groupId>
-    <artifactId>dji-tello-core</artifactId>
-    <version>0.1</version>
+    <artifactId>tello-sdk</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <name>Tello SDK</name>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>tello-core</module>
+        <module>tello-javafx-client</module>
+    </modules>
 
     <build>
         <plugins>
@@ -14,11 +21,10 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 </project>
