@@ -7,7 +7,7 @@ import hu.atig.tello.sdk.core.model.command.TelloCommand;
 import java.io.IOException;
 import java.util.List;
 
-public interface TelloCommunication {
+public interface DroneCommandExecutor {
 
   /**
    * Establishing connecting to the Tello drone.

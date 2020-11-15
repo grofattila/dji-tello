@@ -3,9 +3,9 @@ package hu.atig.tello.sdk.core.communication;
 
 import org.junit.jupiter.api.Test;
 
-public class TelloCommunicationTest {
+public class DroneCommandExecutorTest {
 
-  private final TelloCommunication telloCommunication = new TelloCommunicationImpl();
+  private final DroneCommandExecutor droneCommandExecutor = new DroneCommandExecutorImpl();
 
   @Test
   public void testConnect() {

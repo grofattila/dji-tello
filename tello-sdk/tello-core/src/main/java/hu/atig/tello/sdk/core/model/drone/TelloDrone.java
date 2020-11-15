@@ -1,265 +1,177 @@
 package hu.atig.tello.sdk.core.model.drone;
 
+import hu.atig.tello.sdk.core.communication.DroneCommandExecutor;
+import hu.atig.tello.sdk.core.communication.DroneCommandExecutorImpl;
+import hu.atig.tello.sdk.core.model.command.BasicTelloCommand;
+import hu.atig.tello.sdk.core.model.command.TelloCommand;
+import hu.atig.tello.sdk.core.model.command.TelloCommandValues;
+
+import java.util.logging.Logger;
+
 /**
- * Represents the Tello Drone.
+ * Represents the Tello onboardData.
  */
 public class TelloDrone implements Drone {
 
-  /*
-   * Connection IP address.
-   */
-  public static final String DRONE_IP_ADDRESS = "192.168.10.1";
+    /*
+     * Connection IP address.
+     */
+    public static final String DRONE_IP_ADDRESS = "192.168.10.1";
+    /*
+     * Listen IP address.
+     */
+    public static final String DRONE_LISTEN_IP_ADDRESS = "0.0.0.0";
+    /*
+     * Receive drone state udp port.
+     */
+    public static final Integer UDP_PORT_RECEIVE_DRONE_STATE = 8890;
 
-  /*
-   * Listen IP address.
-   */
-  public static final String DRONE_LISTEN_IP_ADDRESS = "0.0.0.0";
+    /*
+     * Send command and receive response udp port.
+     */
+    public static final Integer UDP_PORT_SEND_COMMAND_RECEIVE_RESPONSE = 8889;
+    /*
+     * Send command and receive response udp port.
+     */
+    public static final Integer UDP_PORT_RECEIVE_DRONE_VIDEO_STREAM = 11111;
+    private static final Logger logger = Logger.getLogger(TelloDrone.class.getName());
+    private final OnboardData onboardData;
+    private final DroneCommandExecutor droneCommandExecutor;
+    private TelloDrone drone;
 
-  /*
-   * Send command and receive response udp port.
-   */
-  public static final Integer UDP_PORT_SEND_COMMAND_RECEIVE_RESPONSE = 8889;
+    public TelloDrone() {
+        onboardData = new TelloOnboardData();
+        droneCommandExecutor = new DroneCommandExecutorImpl();
+    }
 
-  /*
-   * Receive drone state udp port.
-   */
-  public static final Integer UDP_PORT_RECEIVE_DRONE_STATE = 8890;
+    @Override
+    public void connect() {
+        boolean connectionSuccessful = droneCommandExecutor.connect();
+        if (connectionSuccessful) {
+            onboardData.setTelloConnection(ConnectionState.CONNECTED);
+            logger.info("Connected!");
+        }
+    }
 
-  /*
-   * Send command and receive response udp port.
-   */
-  public static final Integer UDP_PORT_RECEIVE_DRONE_VIDEO_STREAM = 11111;
+    @Override
+    public void disconnect() {
+        onboardData.setTelloConnection(ConnectionState.DISCONNECTED);
+        droneCommandExecutor.disconnect();
+        logger.info("Disconnected!");
+    }
 
-  /**
-   * Speed of the drone.
-   */
-  private Double speed;
-
-  /**
-   * Battery percentage of the drone.
-   */
-  private Integer battery;
-
-  /**
-   * Current fly time (seconds).
-   */
-  private Integer flyTime;
-
-  /**
-   * Current fly height (dm).
-   */
-  private Integer height;
-
-  /**
-   * Current temperature of the drone.
-   */
-  private String temperature;
-  private Integer attitudePitch;
-  private Integer attitudeRoll;
-  private Integer attitudeYaw;
-  private Double barometer;
-  private Double accX;
-  private Double accY;
-  private Double accZ;
-  private Integer tof;
-
-  private TelloConnection telloConnection;
-  private TelloMode telloMode;
-
-  public TelloDrone() {
-    telloConnection = TelloConnection.CONNECTED;
-    telloMode = TelloMode.NORMAL;
-  }
-
-  public Double getSpeed() {
-    return speed;
-  }
-
-  public void setSpeed(Double speed) {
-    this.speed = speed;
-  }
-
-  public void setSpeed(String speed) {
-    this.speed = Double.valueOf(speed);
-  }
-
-  public Integer getBattery() {
-    return battery;
-  }
-
-  public void setBattery(Integer battery) {
-    this.battery = battery;
-  }
-
-  public void setBattery(String battery) {
-    this.battery = Integer.valueOf(battery.trim());
-  }
+    @Override
+    public void enterCommandMode() {
+        TelloCommand command = new BasicTelloCommand(TelloCommandValues.COMMAND_MODE);
+        boolean executionSuccessful = droneCommandExecutor.executeCommand(command);
+        if (executionSuccessful) {
+            logger.info("Entering command mode successful");
+        }
+    }
 
 
-  public Integer getFlyTime() {
-    return flyTime;
-  }
+    @Override
+    public void takeOff() {
+        TelloCommand command = new BasicTelloCommand(TelloCommandValues.TAKE_OFF);
+        boolean executionSuccessful = droneCommandExecutor.executeCommand(command);
+        if (executionSuccessful) {
+            logger.info("Taking off command was executed successfully");
+        }
+    }
 
-  public Integer getHeight() {
-    return height;
-  }
+    @Override
+    public void land() {
+        TelloCommand command = new BasicTelloCommand(TelloCommandValues.LAND);
+        boolean executionSuccessful = droneCommandExecutor.executeCommand(command);
+        if (executionSuccessful) {
+            logger.info("Landing command was executed successfully");
+        }
+    }
 
-  public void setHeight(String height) {
-    this.height = Integer.valueOf(height.split("dm")[0]);
-  }
+    @Override
+    public void doFlip(TelloFlip telloFlip) {
 
+    }
 
-  public void setHeight(Integer height) {
-    this.height = height;
-  }
+    @Override
+    public void setSpeed(Integer speed) {
 
-  public void setFlyTime(String flyTime) {
-    this.flyTime = Integer.valueOf(flyTime.split("s")[0]);
-  }
+    }
 
-  public void setFlyTime(Integer flyTime) {
-    this.flyTime = flyTime;
-  }
+    @Override
+    public void forward(Integer distance) {
 
-  /**
-   * Sets the attitude values from the drones output.
-   *
-   * @param attitude Attitude in 3 dimensions.
-   */
-  public void setAttitude(String attitude) {
-    String[] strings = attitude.split(";");
-    this.attitudePitch = Integer.valueOf(strings[0].split(":")[1]);
-    this.attitudeRoll = Integer.valueOf(strings[1].split(":")[1]);
-    this.attitudeYaw = Integer.valueOf(strings[2].split(":")[1]);
-  }
+    }
 
-  public Integer getAttitudePitch() {
-    return attitudePitch;
-  }
+    @Override
+    public void backward(Integer distance) {
 
-  public void setAttitudePitch(Integer attitudePitch) {
-    this.attitudePitch = attitudePitch;
-  }
+    }
 
-  public Integer getAttitudeRoll() {
-    return attitudeRoll;
-  }
+    @Override
+    public void right(Integer distance) {
 
-  public void setAttitudeRoll(Integer attitudeRoll) {
-    this.attitudeRoll = attitudeRoll;
-  }
+    }
 
-  public Integer getAttitudeYaw() {
-    return attitudeYaw;
-  }
+    @Override
+    public void left(Integer distance) {
 
-  public void setAttitudeYaw(Integer attitudeYaw) {
-    this.attitudeYaw = attitudeYaw;
-  }
+    }
 
-  public Double getBarometer() {
-    return barometer;
-  }
+    @Override
+    public void rotateRight(Integer angle) {
 
-  public void setBarometer(String baro) {
-    this.barometer = Double.valueOf(baro);
-  }
+    }
 
+    @Override
+    public void rotateLeft(Integer angle) {
 
-  public void setBarometer(Double barometer) {
-    this.barometer = barometer;
-  }
+    }
 
-  /**
-   * Sets acc form the drones acc data.
-   *
-   * @param acc Acceleration in 3 dimensions.
-   */
-  public void setAcc(String acc) {
-    String[] strings = acc.split(";");
-    this.accX = Double.valueOf(strings[0].split(":")[1]);
-    this.accY = Double.valueOf(strings[1].split(":")[1]);
-    this.accZ = Double.valueOf(strings[2].split(":")[1]);
-  }
+    @Override
+    public void refreshTelloOnBoarData() {
+        onboardData.setSpeed(droneCommandExecutor
+                .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_SPEED)));
+        onboardData.setBattery(droneCommandExecutor
+                .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_BATTERY)));
+        onboardData.setFlyTime(droneCommandExecutor
+                .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_FLY_TIME)));
+        onboardData.setHeight(droneCommandExecutor
+                .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_HEIGHT)));
+        onboardData.setTemperature(droneCommandExecutor
+                .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_TEMPERATURE)));
+        onboardData.setAttitude(droneCommandExecutor
+                .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_ATTITUDE_DATA)));
+        onboardData.setBarometer(droneCommandExecutor
+                .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_BAROMETER)));
+        //onboardData.setAcc(telloCommunication
+        //    .executeReadCommand(new BasicTelloCommand(TelloCommandValues.CURRENT_ACCELERATION)));
+        onboardData.setTof(
+                droneCommandExecutor.executeReadCommand(new BasicTelloCommand(TelloCommandValues.TOF)));
+    }
 
-  public Double getAccX() {
-    return accX;
-  }
+    @Override
+    public void startStream() {
+        boolean executionSuccessful = droneCommandExecutor
+                .executeCommand(new BasicTelloCommand(TelloCommandValues.ENABLE_VIDEO_STREAM));
+        if (executionSuccessful) {
+            droneCommandExecutor.startVideoStream();
+            logger.info("Stream start command was executed successfully");
+        }
+    }
 
-  public void setAccX(Double accX) {
-    this.accX = accX;
-  }
+    @Override
+    public void stopStream() {
+        boolean executionSuccessful = droneCommandExecutor
+                .executeCommand(new BasicTelloCommand(TelloCommandValues.DISABLE_VIDEO_STREAM));
+        if (executionSuccessful) {
+            droneCommandExecutor.stopVideoStream();
+            logger.info("Stream end command was executed successfully");
+        }
+    }
 
-  public Double getAccY() {
-    return accY;
-  }
+    public OnboardData getTelloDroneData() {
+        return onboardData;
+    }
 
-  public void setAccY(Double accY) {
-    this.accY = accY;
-  }
-
-  public Double getAccZ() {
-    return accZ;
-  }
-
-  public void setAccZ(Double accZ) {
-    this.accZ = accZ;
-  }
-
-  public String getTemperature() {
-    return temperature;
-  }
-
-  public void setTemperature(String temperature) {
-    this.temperature = temperature;
-  }
-
-  public TelloConnection getTelloConnection() {
-    return telloConnection;
-  }
-
-  public void setTelloConnection(TelloConnection telloConnection) {
-    this.telloConnection = telloConnection;
-  }
-
-  public TelloMode getTelloMode() {
-    return telloMode;
-  }
-
-  public void setTelloMode(TelloMode telloMode) {
-    this.telloMode = telloMode;
-  }
-
-  public Integer getTof() {
-    return tof;
-  }
-
-  public void setTof(String tof) {
-    this.tof = Integer.valueOf(tof.split("mm")[0]);
-  }
-
-  public void setTof(Integer tof) {
-    this.tof = tof;
-  }
-
-  @Override
-  public String toString() {
-    return "TelloDrone  {"
-        + "speed=" + speed
-        + ", battery=" + battery
-        + ", flyTime=" + flyTime
-        + ", height=" + height
-        + ", temperature='" + temperature + '\''
-        + ", attitudePitch=" + attitudePitch
-        + ", attitudeRoll=" + attitudeRoll
-        + ", attitudeYaw=" + attitudeYaw
-        + ", barometer=" + barometer
-        + ", accX=" + accX
-        + ", accY=" + accY
-        + ", accZ=" + accZ
-        + ", tof=" + tof
-        + ", telloConnection=" + telloConnection
-        + ", telloMode=" + telloMode
-        + '}';
-  }
 }

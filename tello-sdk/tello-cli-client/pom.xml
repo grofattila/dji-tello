@@ -11,9 +11,13 @@
     </parent>
 
     <artifactId>tello-cli-client</artifactId>
-    <version>0.1-SNAPSHOT</version>
 
     <dependencies>
+        <dependency>
+            <groupId>hu.atig</groupId>
+            <artifactId>tello-core</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>

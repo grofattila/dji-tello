@@ -7,11 +7,7 @@ import hu.atig.tello.sdk.core.model.command.TelloCommand;
 import hu.atig.tello.sdk.core.model.drone.TelloDrone;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
@@ -20,9 +16,9 @@ import java.util.logging.Logger;
 /**
  * Sending and receiving data from DJI Tello drone.
  */
-public class TelloCommunicationImpl implements TelloCommunication {
+public class DroneCommandExecutorImpl implements DroneCommandExecutor {
 
-  private static final Logger logger = Logger.getLogger(TelloCommunicationImpl.class.getName());
+  private static final Logger logger = Logger.getLogger(DroneCommandExecutorImpl.class.getName());
 
   /**
    * Datagram connection to the Tello drone.
@@ -32,12 +28,12 @@ public class TelloCommunicationImpl implements TelloCommunication {
   /**
    * Drone's IP address.
    */
-  private InetAddress ipAddress;
+  private final InetAddress ipAddress;
 
   /**
    * Drones UDP PORT.
    */
-  private Integer udpPort;
+  private final Integer udpPort;
 
   /**
    * Tello video stream listener thread.
@@ -49,7 +45,7 @@ public class TelloCommunicationImpl implements TelloCommunication {
    *
    * @throws TelloConnectionException In case of a bad IP address od port number.
    */
-  public TelloCommunicationImpl() throws TelloConnectionException {
+  public DroneCommandExecutorImpl() throws TelloConnectionException {
     try {
       this.ipAddress = InetAddress.getByName(TelloDrone.DRONE_IP_ADDRESS);
       this.udpPort = TelloDrone.UDP_PORT_SEND_COMMAND_RECEIVE_RESPONSE;
