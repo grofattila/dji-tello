@@ -10,10 +10,31 @@ client applications that can utilize the core tello library.
 Feel free to contribute.
 
 ![dji-tello pic](docs/images/tello.jpg)
+## Feature set
+
+| Feature | status |
+| ----------- | ----------- |
+| Connect to Tello              | In progress |
+|Read status values             | In Progress |
+|Set command modes              | In progress |
+|Send simple commands           | In progress |
+|Send complex commands          | In progress |
+|Receive video feed             | Not started |
+|Command line Client            | In progress |
+|JavaFx Client                  | In progress |
+|Android client                 | Not started |
+|Deep learning image analysis   | Not started |
+
+## Tello Firmware
+
+Supported firmwares currently: 1.3.0.0
 
 ## Module list
 
 ### Tello Core library
+
+This module contains the actual implementation for connecting and sending commands to the drone.
+
 ### Tello Command line client
 ### Tello JavaFX GUI Client
 
