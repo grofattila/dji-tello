@@ -1,6 +1,6 @@
 package hu.atig.tello.sdk.core.model.command;
 
-public interface TelloCommand {
+public interface Command {
 
   /**
    * Compose the command with all the parameters neccessary.

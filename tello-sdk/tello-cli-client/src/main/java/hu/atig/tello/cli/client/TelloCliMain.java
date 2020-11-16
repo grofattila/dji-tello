@@ -10,7 +10,6 @@ public class TelloCliMain {
     public static void main(String[] args) {
 
         Drone tello = new TelloDrone();
-
         tello.connect();
 
         try {

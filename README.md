@@ -14,16 +14,16 @@ Feel free to contribute.
 
 | Feature | status |
 | ----------- | ----------- |
-| Connect to Tello              | In progress |
-|Read status values             | In Progress |
-|Set command modes              | In progress |
-|Send simple commands           | In progress |
-|Send complex commands          | In progress |
-|Receive video feed             | Not started |
-|Command line Client            | In progress |
-|JavaFx Client                  | In progress |
-|Android client                 | Not started |
-|Deep learning image analysis   | Not started |
+| Connect to Tello               | In progress |
+| Read status values             | In Progress |
+| Set command modes              | In progress |
+| Send simple commands           | In progress |
+| Send complex commands          | In progress |
+| Receive video feed             | Not started |
+| Command line Client            | In progress |
+| JavaFx Client                  | In progress |
+| Android client                 | Not started |
+| Deep learning image analysis   | Not started |
 
 ## Tello Firmware
 

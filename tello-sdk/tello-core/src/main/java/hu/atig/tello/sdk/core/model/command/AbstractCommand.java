@@ -1,10 +1,10 @@
 package hu.atig.tello.sdk.core.model.command;
 
-public abstract class AbstractTelloCommand implements TelloCommand {
+public abstract class AbstractCommand implements Command {
 
   protected String command;
 
-  public AbstractTelloCommand(String command) {
+  public AbstractCommand(String command) {
     this.command = command;
   }
 

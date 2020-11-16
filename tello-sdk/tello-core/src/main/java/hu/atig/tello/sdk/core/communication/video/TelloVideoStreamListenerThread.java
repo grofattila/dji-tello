@@ -1,23 +1,22 @@
-package hu.atig.tello.sdk.core.communication;
+package hu.atig.tello.sdk.core.communication.video;
 
-import hu.atig.tello.sdk.core.model.drone.TelloDrone;
+import hu.atig.tello.sdk.core.model.drone.TelloConnectionConfiguration;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.logging.Logger;
 
-public class TelloStateListenerThread extends Thread {
+public class TelloVideoStreamListenerThread extends Thread {
 
   private static final Logger logger = Logger
-      .getLogger(TelloStateListenerThread.class.getName());
+      .getLogger(TelloVideoStreamListenerThread.class.getName());
 
   private boolean isStreamOn;
-  private DatagramSocket ds;
-  private byte[] receiveData = new byte[1024];
-  private byte[] sendData = new byte[1024];
+  private DatagramSocket socket;
+  private byte[] receiveData = new byte[1470];
 
   /**
    * Video stream IP address.
@@ -29,45 +28,40 @@ public class TelloStateListenerThread extends Thread {
    */
   private Integer udpPort;
 
-  /**
-   * TODO.
-   */
-  public TelloStateListenerThread() {
+  public TelloVideoStreamListenerThread() {
     logger.info("Initializing video thread");
     isStreamOn = true;
-    try {
-      this.listenIpAddress = InetAddress.getByName(TelloDrone.DRONE_LISTEN_IP_ADDRESS);
-      this.udpPort = TelloDrone.UDP_PORT_SEND_COMMAND_RECEIVE_RESPONSE;
-    } catch (UnknownHostException e) {
-      e.printStackTrace();
-    }
   }
 
   @Override
   public void run() {
     logger.info("Thread has started running....");
     try {
-      ds = new DatagramSocket(udpPort);
-      ds.connect(listenIpAddress, udpPort);
+      socket = new DatagramSocket(TelloConnectionConfiguration.VIDEO_PORT);
     } catch (SocketException e) {
       e.printStackTrace();
       return;
     }
 
     while (isStreamOn) {
-      receiveData = new byte[345600];
+      receiveData = new byte[1470];
       try {
         logger.info("Waiting for data...");
         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-        ds.receive(receivePacket);
+        socket.receive(receivePacket);
+
+        InetAddress address = receivePacket.getAddress();
+        int port = receivePacket.getPort();
+
         logger.info("Packet received");
         logger.info("Data" + receivePacket.toString());
+        //socket.send(receivePacket);
 
       } catch (IOException e) {
         e.printStackTrace();
       }
     }
-
+    socket.close();
 
   }
 
@@ -75,7 +69,7 @@ public class TelloStateListenerThread extends Thread {
     return isStreamOn;
   }
 
-  public void stopThread(boolean streamOn) {
-    isStreamOn = false;
+  public void setStreamOn(boolean streamOn) {
+    isStreamOn = streamOn;
   }
 }

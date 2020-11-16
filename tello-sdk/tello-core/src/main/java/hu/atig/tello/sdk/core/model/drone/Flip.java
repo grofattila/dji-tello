@@ -1,6 +1,6 @@
 package hu.atig.tello.sdk.core.model.drone;
 
-public enum TelloFlip {
+public enum Flip {
   LEFT,
   RIGHT,
   FORWARD,

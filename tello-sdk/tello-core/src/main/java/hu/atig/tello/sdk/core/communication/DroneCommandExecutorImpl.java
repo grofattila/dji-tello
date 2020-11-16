@@ -1,10 +1,11 @@
 package hu.atig.tello.sdk.core.communication;
 
-import hu.atig.tello.sdk.core.exception.TelloCommandException;
-import hu.atig.tello.sdk.core.exception.TelloConnectionException;
-import hu.atig.tello.sdk.core.exception.TelloException;
-import hu.atig.tello.sdk.core.model.command.TelloCommand;
-import hu.atig.tello.sdk.core.model.drone.TelloDrone;
+import hu.atig.tello.sdk.core.communication.video.TelloVideoStreamListenerThread;
+import hu.atig.tello.sdk.core.exception.BaseException;
+import hu.atig.tello.sdk.core.exception.CommandException;
+import hu.atig.tello.sdk.core.exception.ConnectionException;
+import hu.atig.tello.sdk.core.model.command.Command;
+import hu.atig.tello.sdk.core.model.drone.TelloConnectionConfiguration;
 
 import java.io.IOException;
 import java.net.*;
@@ -43,31 +44,31 @@ public class DroneCommandExecutorImpl implements DroneCommandExecutor {
   /**
    * Constructor that initialises IP address and UDP port of the drone.
    *
-   * @throws TelloConnectionException In case of a bad IP address od port number.
+   * @throws ConnectionException In case of a bad IP address od port number.
    */
-  public DroneCommandExecutorImpl() throws TelloConnectionException {
+  public DroneCommandExecutorImpl() throws ConnectionException {
     try {
-      this.ipAddress = InetAddress.getByName(TelloDrone.DRONE_IP_ADDRESS);
-      this.udpPort = TelloDrone.UDP_PORT_SEND_COMMAND_RECEIVE_RESPONSE;
+      this.ipAddress = InetAddress.getByName(TelloConnectionConfiguration.DRONE_IP_ADDRESS);
+      this.udpPort = TelloConnectionConfiguration.COMMAND_PORT;
     } catch (UnknownHostException e) {
-      throw new TelloConnectionException("Unknown host");
+      throw new ConnectionException("Unknown host");
     }
   }
 
   @Override
-  public boolean connect() throws TelloConnectionException {
+  public boolean connect() throws ConnectionException {
     try {
       ds = new DatagramSocket(udpPort);
       ds.connect(ipAddress, udpPort);
       return ds.isConnected();
     } catch (SocketException e) {
       logger.info("Connection to the drone could not be established.");
-      throw new TelloConnectionException("Could not connect");
+      throw new ConnectionException("Could not connect");
     }
   }
 
   @Override
-  public boolean executeCommand(final TelloCommand telloCommand) {
+  public boolean executeCommand(final Command telloCommand) {
     if (telloCommand == null) {
       logger.info("TelloCommand was null");
       return false;
@@ -94,14 +95,14 @@ public class DroneCommandExecutorImpl implements DroneCommandExecutor {
   }
 
   @Override
-  public String executeReadCommand(TelloCommand telloCommand) throws TelloException {
+  public String executeReadCommand(Command telloCommand) throws BaseException {
     if (telloCommand == null) {
       logger.info("TelloCommand was null");
-      throw new TelloCommandException("Command was empty");
+      throw new CommandException("Command was empty");
     }
     if (!ds.isConnected()) {
       logger.info("Tello connection lost");
-      throw new TelloConnectionException("No connection");
+      throw new ConnectionException("No connection");
     }
 
     final String command = telloCommand.composeCommand();
@@ -115,12 +116,12 @@ public class DroneCommandExecutorImpl implements DroneCommandExecutor {
     } catch (IOException e) {
       logger.info("Exception occurred during sending and receiving command");
       logger.info(e.getMessage());
-      throw new TelloConnectionException("Unexpected error during communication");
+      throw new ConnectionException("Unexpected error during communication");
     }
   }
 
   @Override
-  public void executeCommands(List<TelloCommand> telloCommandList) {
+  public void executeCommands(List<Command> commandList) {
 
   }
 

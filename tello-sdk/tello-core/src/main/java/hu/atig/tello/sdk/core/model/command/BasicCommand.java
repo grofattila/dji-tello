@@ -2,9 +2,9 @@ package hu.atig.tello.sdk.core.model.command;
 
 import java.util.Objects;
 
-public class BasicTelloCommand extends AbstractTelloCommand {
+public class BasicCommand extends AbstractCommand {
 
-  public BasicTelloCommand(String command) {
+  public BasicCommand(String command) {
     super(command);
   }
 
@@ -21,7 +21,7 @@ public class BasicTelloCommand extends AbstractTelloCommand {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BasicTelloCommand that = (BasicTelloCommand) o;
+    BasicCommand that = (BasicCommand) o;
     return Objects.equals(command, that.command);
   }
 

@@ -1,10 +1,11 @@
 package hu.atig.tello.sdk.core.model.command;
 
-public class SimpleTelloCommand extends AbstractTelloCommand {
+public class ComplexCommand extends AbstractCommand {
 
-  public SimpleTelloCommand(String command) {
+  public ComplexCommand(String command) {
     super(command);
   }
+
 
   @Override
   public String composeCommand() {

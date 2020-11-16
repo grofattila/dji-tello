@@ -32,9 +32,9 @@ public interface Drone {
     /**
      * Doing a flip in the chosen direction.
      *
-     * @param telloFlip Type of the flip.
+     * @param flip Type of the flip.
      */
-    void doFlip(TelloFlip telloFlip);
+    void doFlip(Flip flip);
 
     /**
      * Settign the drone's speed.
